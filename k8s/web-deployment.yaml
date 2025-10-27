@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      imagePullSecrets:
+        - name: ecr-creds
+      containers:
+      - name: web
+        image: 471112962247.dkr.ecr.us-east-1.amazonaws.com/clo835-webapp:latest
+        env:
+        - name: DBHOST
+          value: mysql.app.svc.cluster.local
+        - name: DBPORT
+          value: "3306"
+        ports:
+        - containerPort: 8080
